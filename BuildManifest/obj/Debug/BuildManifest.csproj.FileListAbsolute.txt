@@ -1,0 +1,6 @@
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.exe.config
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.exe
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.pdb
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.csprojResolveAssemblyReference.cache
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.exe
+c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.pdb
