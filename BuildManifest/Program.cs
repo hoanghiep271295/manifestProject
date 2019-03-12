@@ -1,99 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 using System.IO;
+using System.Text;
 
 namespace BuildManifest
 {
-    class Program
+    internal class Program
     {
         public class CreateFileOrFolder
         {
             public static void Main(string[] args)
             {
+                string path = @"D:\mani\Assets";
+                string config = @"D:\mani\Assets\config.txt";
+                string projectmanifest = @"D:\mani\Out\project.manifest";
+                string versionmanifest = @"D:\mani\Out\version.manifest";
 
-                string path = @"E:\Manifest\Assets";
-                var target = @"E:\Manifest\Out";
-                string[] dirs = Directory.GetFiles(path);
-                string projectmanifest = @"E:\Manifest\Out\project.manifest";
-                string versionmanifest = @"E:\Manifest\Out\version.manifest";
-
-                if (!File.Exists(projectmanifest))
+                if (new makeFile().makeFilebyConfig(projectmanifest, versionmanifest, config))
                 {
-                    // Create a file to write to.
-                    using (StreamWriter sw = File.CreateText(projectmanifest))
-                    {
-                        sw.WriteLine("{");
-                        sw.WriteLine($" \"packageUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest\",");
-                        sw.WriteLine($" \"remoteManifestUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest \",");
-                        sw.WriteLine($" \"remoteVersionUrl\" : \"http://192.168.1.132:80/assets/taixiu/version.manifest\",");
-                        sw.WriteLine($" \"version\" : \"1.0.1\",");
-                        sw.WriteLine($"	\"engineVersion\" : \"cocos2djs3.13\",");
-                        sw.WriteLine($"	\"assets\" : ");
-
-                    }
-
+                    Console.WriteLine("Make file Success");
                 }
-                if (!File.Exists(versionmanifest))
+                else
                 {
-                    // Create a file to write to.
-                    using (StreamWriter sw = File.CreateText(projectmanifest))
-                    {
-                        sw.WriteLine("{");
-                        sw.WriteLine($" \"packageUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest\",");
-                        sw.WriteLine($" \"remoteManifestUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest \",");
-                        sw.WriteLine($" \"remoteVersionUrl\" : \"http://192.168.1.132:80/assets/taixiu/version.manifest\",");
-                        sw.WriteLine($" \"version\" : \"1.0.1\",");
-                        sw.WriteLine($"	\"engineVersion\" : \"cocos2djs3.13\",");
-                        sw.WriteLine($"	\"assets \" : \",");
-
-
-                    }
-
+                    Console.WriteLine("Make file UnSuccess");
+                    return;
                 }
+
+                //if (!File.Exists(projectmanifest))
+                //{
+                //    // Create a file to write to.
+                //    using (StreamWriter sw = File.CreateText(projectmanifest))
+                //    {
+                //        sw.WriteLine("{");
+                //        sw.WriteLine($" \"packageUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest\",");
+                //        sw.WriteLine($" \"remoteManifestUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest \",");
+                //        sw.WriteLine($" \"remoteVersionUrl\" : \"http://192.168.1.132:80/assets/taixiu/version.manifest\",");
+                //        sw.WriteLine($" \"version\" : \"1.0.1\",");
+                //        sw.WriteLine($"	\"engineVersion\" : \"cocos2djs3.13\",");
+                //        sw.WriteLine($"	\"assets\" : ");
+                //    }
+                //}
 
                 foreach (string dir in Directory.EnumerateFiles(path, "*"))
                 {
-                    Console.WriteLine($" \"");
-                    Console.WriteLine(dir);
-                    using (var md5 = MD5.Create())
+                    using (StreamWriter sw = File.AppendText(projectmanifest))
                     {
-                        using (var stream = File.OpenRead(dir))
-                        {
-                            using (StreamWriter sw = File.AppendText(projectmanifest))
-                            {
-                                //{ "js/animations.js":{ "md5":"bfb6068ed1278267dcb486caff4ca07f"},{
-                                sw.WriteLine(dir);
-                                sw.WriteLine("\": \"");
-
-
-                                sw.WriteLine(BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", string.Empty));
-
-                            }
-
-
-                         
-                        }
+                        //{ "js/animations.js":{ "md5":"bfb6068ed1278267dcb486caff4ca07f"},{
+                        Console.WriteLine(new JSONObject().ConvertToObj(dir));
+                        sw.WriteLine(new JSONObject().ConvertToObj(dir));
                     }
-
-                    Console.WriteLine("}");
-             
-
-                    //using (StreamReader sr = File.OpenText(projectmanifest))
-                    //{
-                    //    string s;
-                    //    while ((s = sr.ReadLine()) != null)
-                    //    {
-                    //        Console.WriteLine(s);
-                    //    }
-                    //}
-
                 }
 
+                //Console.WriteLine("}");
 
+                //using (StreamReader sr = File.OpenText(projectmanifest))
+                //{
+                //    string s;
+                //    while ((s = sr.ReadLine()) != null)
+                //    {
+                //        Console.WriteLine(s);
+                //    }
+                //}
+                //}
 
                 //try
                 //{
@@ -115,9 +82,56 @@ namespace BuildManifest
 
                 Console.ReadKey();
             }
-
-            
         }
- 
+    }
+
+    public class makeFile
+    {
+        public bool makeFilebyConfig(string projectmanifest, string versionmanifest, string config)
+        {
+            int ret = -1;
+            if (File.Exists(config))
+            {
+                ret = 1;
+            }
+            if (File.Exists(projectmanifest))
+            {
+                File.Delete(projectmanifest);
+            }
+            if (File.Exists(versionmanifest))
+            {
+                File.Delete(versionmanifest);
+            }
+            
+            if (!File.Exists(projectmanifest))
+            {
+                using (FileStream fs = File.Create(projectmanifest))
+                {
+                    byte[] info = new UTF8Encoding(true).GetBytes("");
+                    // Add some information to the file.
+                    fs.Write(info, 0, info.Length);
+                }
+            }
+            
+            if (!File.Exists(versionmanifest))
+            {
+                using (FileStream fs = File.Create(versionmanifest))
+                {
+                    byte[] info = new UTF8Encoding(true).GetBytes("");
+                    // Add some information to the file.
+                    fs.Write(info, 0, info.Length);
+                }
+            }
+            if (ret == 1)
+            {
+                //File.Copy(config, projectmanifest);
+                //File.Copy(config, versionmanifest);
+                string content = File.ReadAllText(config);
+                File.AppendAllText(projectmanifest, content);
+                File.AppendAllText(versionmanifest, content);
+            }
+
+            return true;
+        }
     }
 }
