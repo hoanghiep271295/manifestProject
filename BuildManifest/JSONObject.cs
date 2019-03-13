@@ -2,20 +2,14 @@
 {
     public class JSONObject
     {
-        public string ConvertToObj(string path)
+        public string ConvertToObj(string path,string pre)
         {
-            //dynamic obj = new ExpandoObject();
-            //obj.path = path;
-            //jsonCon jsoncon = new jsonCon();
-            //jsoncon.md5 = "md5";
-            //jsoncon.hashcode = new MD5().GetMD5HashFromFile(path);
-            //obj.endcode = jsoncon;
-            //return obj;
+        
             TaoOn obj = new TaoOn();
             jsonCon jsonCon = new jsonCon();
             jsonCon.md5 = "md5";
             jsonCon.hashcode = new MD5().GetMD5HashFromFile(path);
-            obj.path = path;
+            obj.path = path.Remove(0,pre.Length+1).Replace(@"\","/");
 
             obj.con = jsonCon;
 

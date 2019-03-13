@@ -1,7 +1,6 @@
 c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.exe.config
 c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.exe
 c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\BuildManifest.pdb
-c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.csprojResolveAssemblyReference.cache
 c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.exe
 c:\users\bao\documents\visual studio 2015\Projects\BuildManifest\BuildManifest\obj\Debug\BuildManifest.pdb
 D:\Manifest\manifestProject\BuildManifest\bin\Debug\BuildManifest.exe.config
@@ -16,3 +15,9 @@ D:\Manifest\manifestProject\BuildManifest\bin\Debug\System.Net.Http.Formatting.d
 D:\Manifest\manifestProject\BuildManifest\bin\Debug\Newtonsoft.Json.pdb
 D:\Manifest\manifestProject\BuildManifest\bin\Debug\Newtonsoft.Json.xml
 D:\Manifest\manifestProject\BuildManifest\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\Newtonsoft.Json.MediaTypeFormatter.dll
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Bao\Documents\Visual Studio 2015\Projects\BuildManifest\BuildManifest\bin\Debug\System.Net.Http.Formatting.xml

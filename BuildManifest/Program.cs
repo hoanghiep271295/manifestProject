@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BuildManifest
 {
@@ -10,10 +11,18 @@ namespace BuildManifest
         {
             public static void Main(string[] args)
             {
-                string path = @"D:\mani\Assets";
-                string config = @"D:\mani\Assets\config.txt";
-                string projectmanifest = @"D:\mani\Out\project.manifest";
-                string versionmanifest = @"D:\mani\Out\version.manifest";
+             
+                string path = @"E:\Manifest\Assets\game";
+                string config = @"E:\Manifest\Assets\config.txt";
+                string projectmanifest = @"E:\Manifest\Out\project.manifest";
+                string versionmanifest = @"E:\Manifest\Out\version.manifest";
+               
+                string version = "";
+                string currentpath = Directory.GetCurrentDirectory();
+                Console.WriteLine("currentpath {0}", currentpath);
+                Console.WriteLine("Nhập vào version : \n");
+                version = Console.ReadLine();
+                Console.Write("Ban vua nhap chuoi: {0}\n", version);
 
                 if (new makeFile().makeFilebyConfig(projectmanifest, versionmanifest, config))
                 {
@@ -25,61 +34,40 @@ namespace BuildManifest
                     return;
                 }
 
-                //if (!File.Exists(projectmanifest))
-                //{
-                //    // Create a file to write to.
-                //    using (StreamWriter sw = File.CreateText(projectmanifest))
-                //    {
-                //        sw.WriteLine("{");
-                //        sw.WriteLine($" \"packageUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest\",");
-                //        sw.WriteLine($" \"remoteManifestUrl\" : \"http://192.168.1.132:80/assets/taixiu/project.manifest \",");
-                //        sw.WriteLine($" \"remoteVersionUrl\" : \"http://192.168.1.132:80/assets/taixiu/version.manifest\",");
-                //        sw.WriteLine($" \"version\" : \"1.0.1\",");
-                //        sw.WriteLine($"	\"engineVersion\" : \"cocos2djs3.13\",");
-                //        sw.WriteLine($"	\"assets\" : ");
-                //    }
-                //}
-
-                foreach (string dir in Directory.EnumerateFiles(path, "*"))
+                string assets = "";
+                int fCount = Directory.GetFiles(path, ".", SearchOption.AllDirectories).Length;
+                int count = 0;
+                foreach (string dir in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
                 {
-                    using (StreamWriter sw = File.AppendText(projectmanifest))
+                    //Console.WriteLine(" dir {0}", dir);
+                    count++;
+                    if (dir.Remove(0, path.Length + 1) == "config.txt")
                     {
-                        //{ "js/animations.js":{ "md5":"bfb6068ed1278267dcb486caff4ca07f"},{
-                        Console.WriteLine(new JSONObject().ConvertToObj(dir));
-                        sw.WriteLine(new JSONObject().ConvertToObj(dir));
+                        Console.WriteLine("Khong chua file config");
+                    }
+                    else
+                    {
+                        if (count == fCount)
+                        {
+                            assets += new JSONObject().ConvertToObj(dir, path);
+                        }
+                        else
+                        {
+                            assets += new JSONObject().ConvertToObj(dir, path) + ",";
+                        }
                     }
                 }
+            
+                string text = File.ReadAllText(projectmanifest);
+                text = text.Replace("@_version_@", version);
+                text = text.Replace("@_assets_@", assets);
+                File.WriteAllText(projectmanifest, text);
 
-                //Console.WriteLine("}");
-
-                //using (StreamReader sr = File.OpenText(projectmanifest))
-                //{
-                //    string s;
-                //    while ((s = sr.ReadLine()) != null)
-                //    {
-                //        Console.WriteLine(s);
-                //    }
-                //}
-                //}
-
-                //try
-                //{
-                //    string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-                //    Console.WriteLine("The number of directories starting with p is {0}.", dirs.Length);
-                //    foreach (string dir in dirs)
-                //    {
-                //        Console.WriteLine(dir.ToString().Remove(0,11));
-                //        if (!System.IO.Directory.Exists(targetPath))
-                //        {
-                //            System.IO.Directory.CreateDirectory(targetPath);
-                //        }
-                //    }
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine("The process failed: {0}", e.ToString());
-                //}
-
+                string text1 = File.ReadAllText(versionmanifest);
+                text1 = text1.Replace("@_version_@", version);
+                text1 = text1.Replace("@_assets_@", "");
+                File.WriteAllText(versionmanifest, text);
+                
                 Console.ReadKey();
             }
         }
@@ -102,7 +90,7 @@ namespace BuildManifest
             {
                 File.Delete(versionmanifest);
             }
-            
+
             if (!File.Exists(projectmanifest))
             {
                 using (FileStream fs = File.Create(projectmanifest))
@@ -112,7 +100,7 @@ namespace BuildManifest
                     fs.Write(info, 0, info.Length);
                 }
             }
-            
+
             if (!File.Exists(versionmanifest))
             {
                 using (FileStream fs = File.Create(versionmanifest))
@@ -124,8 +112,6 @@ namespace BuildManifest
             }
             if (ret == 1)
             {
-                //File.Copy(config, projectmanifest);
-                //File.Copy(config, versionmanifest);
                 string content = File.ReadAllText(config);
                 File.AppendAllText(projectmanifest, content);
                 File.AppendAllText(versionmanifest, content);
